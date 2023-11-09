@@ -1,0 +1,61 @@
+gitimport sailpoint.tools.Util;
+  import org.apache.log4j.Logger;
+  import org.apache.log4j.Level;
+
+  Logger log = Logger.getLogger("rule.mhp.SAPHR.Customization");
+  String ruleName = "Rule-Mhp-SAPHR-Customization";
+ 
+  if(log.isDebugEnabled()) log.debug("***RUNNING RULE [ " + ruleName +" ] ");
+ 
+  String startDate = object.getAttribute("StartDate");
+
+  String country = object.getAttribute("Country Code");
+  if(Util.isNullOrEmpty(startDate) ){
+    return null;
+  }
+/*
+ if(Util.isNullOrEmpty(country) || (Util.isNotNullOrEmpty(country) &&  (!(country.equalsIgnoreCase("RO") || country.equalsIgnoreCase("CN") || country.equalsIgnoreCase("US") )) ) ){
+    return null;
+  }*/
+  String firstName = object.getAttribute("FirstName");
+  String lastName = object.getAttribute("LastName");
+if (Util.isNullOrEmpty(firstName) && Util.isNullOrEmpty(lastName)) {
+  return null;
+}
+  if(log.isTraceEnabled()) log.trace("***PRINTING OBJECT IN RULE [ " + ruleName +" ] " +object.toXml());
+  String employeeNumber = object.getAttribute("Employee Number");
+  if(employeeNumber != null){
+    if(employeeNumber.startsWith("0")){
+      employeeNumber = employeeNumber.substring(1);
+      if(employeeNumber.startsWith("0")){
+        employeeNumber = employeeNumber.substring(1);
+      }
+    }
+  }
+  object.put("Employee Number",employeeNumber);
+  object.setDisplayName(employeeNumber);
+
+  String centralPersonId = object.getAttribute("Central Person ID");
+  if(centralPersonId != null){
+    if(centralPersonId.startsWith("0")){
+      centralPersonId = centralPersonId.substring(1);
+      if(centralPersonId.startsWith("0")){
+        centralPersonId = centralPersonId.substring(1);
+      }
+    }
+  }
+  object.put("Central Person ID",centralPersonId);
+  object.setIdentity(employeeNumber);
+ 
+  String Supervisor = object.getAttribute("YYMHPVG");
+  if(Supervisor != null){
+    if(Supervisor.startsWith("0")){
+      Supervisor = Supervisor.substring(1);
+      if(Supervisor.startsWith("0")){
+        Supervisor = Supervisor.substring(1);
+      }
+    }
+  }
+  object.put("YYMHPVG",Supervisor);
+  return object;
+
